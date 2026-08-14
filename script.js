@@ -26,21 +26,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let profileData = { ...defaultProfile };
 
-  // Load saved profile data from LocalStorage
-  const savedData = localStorage.getItem('intro_card_profile');
-  if (savedData) {
+  // Load saved profile data from URL Sync or LocalStorage
+  let urlSynced = false;
+  const hash = window.location.hash || window.location.search;
+  if (hash && hash.includes('data=')) {
     try {
-      profileData = { ...defaultProfile, ...JSON.parse(savedData) };
-      if (profileData.company) {
-        profileData.company = profileData.company.replace(/Card Ltd\.?/gi, '').trim();
-      }
-      if (profileData.bio) {
-        profileData.bio = profileData.bio.replace(/Card Ltd\.?/gi, '').trim();
-      }
-      // Save cleaned data
+      const encodedStr = hash.split('data=')[1].split('&')[0];
+      const decodedStr = decodeURIComponent(escape(atob(decodeURIComponent(encodedStr))));
+      const urlProfile = JSON.parse(decodedStr);
+      profileData = { ...defaultProfile, ...urlProfile };
       localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
-    } catch (e) {
-      console.error('Error loading saved profile data:', e);
+      urlSynced = true;
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.pathname);
+      }
+    } catch (err) {
+      console.error('Error parsing URL sync data:', err);
+    }
+  }
+
+  if (!urlSynced) {
+    const savedData = localStorage.getItem('intro_card_profile');
+    if (savedData) {
+      try {
+        profileData = { ...defaultProfile, ...JSON.parse(savedData) };
+        if (profileData.company) {
+          profileData.company = profileData.company.replace(/Card Ltd\.?/gi, '').trim();
+        }
+        if (profileData.bio) {
+          profileData.bio = profileData.bio.replace(/Card Ltd\.?/gi, '').trim();
+        }
+        localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
+      } catch (e) {
+        console.error('Error loading saved profile data:', e);
+      }
     }
   }
 
@@ -243,12 +262,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function getEncodedSyncUrl() {
+    let baseUrl = window.location.href.split('#')[0].split('?')[0];
+    try {
+      const cleanProfile = { ...profileData };
+      if (cleanProfile.avatar && cleanProfile.avatar.length > 500) {
+        delete cleanProfile.avatar;
+      }
+      const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(cleanProfile)))));
+      return `${baseUrl}#data=${encoded}`;
+    } catch (e) {
+      return baseUrl;
+    }
+  }
+
   function openQRModal() {
     qrModal.classList.add('active');
     
     let currentUrl = window.location.href;
     if (currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1')) {
       currentUrl = `http://10.164.119.211:3000`;
+    } else {
+      currentUrl = getEncodedSyncUrl();
     }
     
     qrUrlInput.value = currentUrl;

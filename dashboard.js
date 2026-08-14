@@ -309,5 +309,53 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.addEventListener('click', window.handleLogout);
   }
 
+  // ==========================================================================
+  // Mobile Sync QR Modal Logic
+  // ==========================================================================
+  const mobileSyncBtn = document.getElementById('mobileSyncBtn');
+  const syncModal = document.getElementById('syncModal');
+  const closeSyncModalBtn = document.getElementById('closeSyncModalBtn');
+  const syncQrCode = document.getElementById('syncQrCode');
+
+  function getDashboardEncodedSyncUrl() {
+    let baseUrl = window.location.href.split('dashboard.html')[0] + 'index.html';
+    try {
+      const cleanProfile = { ...profileData };
+      if (cleanProfile.avatar && cleanProfile.avatar.length > 500) {
+        delete cleanProfile.avatar;
+      }
+      const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(cleanProfile)))));
+      return `${baseUrl}#data=${encoded}`;
+    } catch (e) {
+      return baseUrl;
+    }
+  }
+
+  if (mobileSyncBtn && syncModal && syncQrCode) {
+    mobileSyncBtn.addEventListener('click', () => {
+      syncQrCode.innerHTML = '';
+      const syncUrl = getDashboardEncodedSyncUrl();
+      if (window.QRCode) {
+        new QRCode(syncQrCode, {
+          text: syncUrl,
+          width: 200,
+          height: 200,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      }
+      syncModal.classList.add('active');
+      syncModal.style.display = 'flex';
+    });
+  }
+
+  if (closeSyncModalBtn && syncModal) {
+    closeSyncModalBtn.addEventListener('click', () => {
+      syncModal.classList.remove('active');
+      syncModal.style.display = 'none';
+    });
+  }
+
   checkSessionAuth();
 });
