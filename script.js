@@ -26,40 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let profileData = { ...defaultProfile };
 
-  // Load saved profile data from URL Sync or LocalStorage
-  let urlSynced = false;
-  const hash = window.location.hash || window.location.search;
-  if (hash && hash.includes('data=')) {
+  // Load saved profile data from LocalStorage
+  const savedData = localStorage.getItem('intro_card_profile');
+  if (savedData) {
     try {
-      const encodedStr = hash.split('data=')[1].split('&')[0];
-      const decodedStr = decodeURIComponent(escape(atob(decodeURIComponent(encodedStr))));
-      const urlProfile = JSON.parse(decodedStr);
-      profileData = { ...defaultProfile, ...urlProfile };
+      profileData = { ...defaultProfile, ...JSON.parse(savedData) };
+      if (profileData.company) {
+        profileData.company = profileData.company.replace(/Card Ltd\.?/gi, '').trim();
+      }
+      if (profileData.bio) {
+        profileData.bio = profileData.bio.replace(/Card Ltd\.?/gi, '').trim();
+      }
+      // Save cleaned data
       localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
-      urlSynced = true;
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, null, window.location.pathname);
-      }
-    } catch (err) {
-      console.error('Error parsing URL sync data:', err);
-    }
-  }
-
-  if (!urlSynced) {
-    const savedData = localStorage.getItem('intro_card_profile');
-    if (savedData) {
-      try {
-        profileData = { ...defaultProfile, ...JSON.parse(savedData) };
-        if (profileData.company) {
-          profileData.company = profileData.company.replace(/Card Ltd\.?/gi, '').trim();
-        }
-        if (profileData.bio) {
-          profileData.bio = profileData.bio.replace(/Card Ltd\.?/gi, '').trim();
-        }
-        localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
-      } catch (e) {
-        console.error('Error loading saved profile data:', e);
-      }
+    } catch (e) {
+      console.error('Error loading saved profile data:', e);
     }
   }
 
@@ -262,28 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function getEncodedSyncUrl() {
-    let baseUrl = window.location.href.split('#')[0].split('?')[0];
-    try {
-      const cleanProfile = { ...profileData };
-      if (cleanProfile.avatar && cleanProfile.avatar.length > 500) {
-        delete cleanProfile.avatar;
-      }
-      const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(cleanProfile)))));
-      return `${baseUrl}#data=${encoded}`;
-    } catch (e) {
-      return baseUrl;
-    }
-  }
-
   function openQRModal() {
     qrModal.classList.add('active');
     
     let currentUrl = window.location.href;
     if (currentUrl.includes('localhost') || currentUrl.includes('127.0.0.1')) {
       currentUrl = `http://10.164.119.211:3000`;
-    } else {
-      currentUrl = getEncodedSyncUrl();
     }
     
     qrUrlInput.value = currentUrl;
@@ -354,6 +319,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  const CLOUD_STORAGE_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b110019ffdc160cf15ed';
+
+  async function loadRemoteProfileData() {
+    try {
+      const res = await fetch(CLOUD_STORAGE_URL, { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.data) {
+          profileData = { ...defaultProfile, ...json.data };
+          localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
+          renderProfile();
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('Cloud storage sync unreachable, trying fallback static profile:', err);
+    }
+
+    try {
+      const staticRes = await fetch('./profile.json', { cache: 'no-store' });
+      if (staticRes.ok) {
+        const staticJson = await staticRes.json();
+        if (staticJson) {
+          profileData = { ...defaultProfile, ...staticJson };
+          localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
+          renderProfile();
+        }
+      }
+    } catch (e) {
+      console.warn('Static profile.json unavailable:', e);
+    }
+  }
+
   // Initialize
   renderProfile();
+  loadRemoteProfileData();
 });

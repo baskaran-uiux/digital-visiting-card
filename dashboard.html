@@ -25,9 +25,6 @@
         <a href="index.html" target="_blank" class="dash-btn dash-btn-outline">
           <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Card
         </a>
-        <button id="mobileSyncBtn" type="button" class="dash-btn dash-btn-outline" title="Sync Card Data to Mobile Phone">
-          <i class="fa-solid fa-qrcode"></i> Mobile Sync
-        </button>
         <button id="saveTopBtn" type="button" class="dash-btn dash-btn-primary">
           <i class="fa-solid fa-floppy-disk"></i> Save Changes
         </button>
@@ -240,24 +237,6 @@ Helping people to grow their business network by using INTRO™</textarea>
     </div>
   </div>
 
-  <!-- Mobile Sync QR Modal -->
-  <div class="login-overlay" id="syncModal">
-    <div class="login-card" style="max-width: 440px;">
-      <div class="login-icon">
-        <i class="fa-solid fa-mobile-screen-button"></i>
-      </div>
-      <div class="login-header">
-        <h2>Sync Card to Mobile Phone</h2>
-        <p>Scan this QR code with your mobile phone camera to instantly transfer and save your updated business card data!</p>
-      </div>
-      <div id="syncQrCode" style="background:#FFF; padding:16px; border-radius:18px; margin: 10px 0 20px;"></div>
-      <button type="button" id="closeSyncModalBtn" class="dash-btn dash-btn-outline full-width-btn">
-        <i class="fa-solid fa-xmark"></i> Close Sync Modal
-      </button>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="dashboard.js?v=1.0.4"></script>
+  <script src="dashboard.js"></script>
 </body>
 </html>

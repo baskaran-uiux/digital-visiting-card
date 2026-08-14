@@ -110,6 +110,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2500);
   }
 
+  const CLOUD_STORAGE_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b110019ffdc160cf15ed';
+
+  async function syncToCloud(data) {
+    try {
+      const payload = {
+        name: 'intro_card_profile',
+        data: data
+      };
+      await fetch(CLOUD_STORAGE_URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.warn('Cloud sync background error:', err);
+    }
+  }
+
   // Save State and Reload Preview
   function saveProfileData(notify = true) {
     const fullCompany = companyInput.value.trim();
@@ -133,9 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
     profileData.instagram = instagramInput.value.trim();
     profileData.facebook = facebookInput.value.trim();
     profileData.accentColor = accentColorInput.value;
-    if (changePasscodeInput) profileData.adminPasscode = changePasscodeInput.value.trim() || 'admin123';
+    if (changePasscodeInput) profileData.adminPasscode = changePasscodeInput.value.trim() || 'baskaran@#2026';
 
     localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
+    syncToCloud(profileData);
 
     // Reload iframe preview
     if (previewIframe && previewIframe.contentWindow) {
@@ -143,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (notify) {
-      showToast('⚡ Saved successfully!');
+      showToast('⚡ Saved & Cloud Synced!');
     }
   }
 
@@ -307,54 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (logoutBtn) {
     logoutBtn.addEventListener('click', window.handleLogout);
-  }
-
-  // ==========================================================================
-  // Mobile Sync QR Modal Logic
-  // ==========================================================================
-  const mobileSyncBtn = document.getElementById('mobileSyncBtn');
-  const syncModal = document.getElementById('syncModal');
-  const closeSyncModalBtn = document.getElementById('closeSyncModalBtn');
-  const syncQrCode = document.getElementById('syncQrCode');
-
-  function getDashboardEncodedSyncUrl() {
-    let baseUrl = window.location.href.split('dashboard.html')[0] + 'index.html';
-    try {
-      const cleanProfile = { ...profileData };
-      if (cleanProfile.avatar && cleanProfile.avatar.length > 500) {
-        delete cleanProfile.avatar;
-      }
-      const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(cleanProfile)))));
-      return `${baseUrl}#data=${encoded}`;
-    } catch (e) {
-      return baseUrl;
-    }
-  }
-
-  if (mobileSyncBtn && syncModal && syncQrCode) {
-    mobileSyncBtn.addEventListener('click', () => {
-      syncQrCode.innerHTML = '';
-      const syncUrl = getDashboardEncodedSyncUrl();
-      if (window.QRCode) {
-        new QRCode(syncQrCode, {
-          text: syncUrl,
-          width: 200,
-          height: 200,
-          colorDark: '#000000',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.H
-        });
-      }
-      syncModal.classList.add('active');
-      syncModal.style.display = 'flex';
-    });
-  }
-
-  if (closeSyncModalBtn && syncModal) {
-    closeSyncModalBtn.addEventListener('click', () => {
-      syncModal.classList.remove('active');
-      syncModal.style.display = 'none';
-    });
   }
 
   checkSessionAuth();
