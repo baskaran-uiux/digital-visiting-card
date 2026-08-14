@@ -319,17 +319,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // PostMessage & Storage Event Listeners for Live Iframe Preview
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'UPDATE_PROFILE') {
+      profileData = { ...defaultProfile, ...e.data.data };
+      renderProfile();
+    }
+  });
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'intro_card_profile' && e.newValue) {
+      try {
+        profileData = { ...defaultProfile, ...JSON.parse(e.newValue) };
+        renderProfile();
+      } catch (err) {
+        console.error('Error handling storage event:', err);
+      }
+    }
+  });
+
   const CLOUD_STORAGE_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b110019ffdc160cf15ed';
 
   async function loadRemoteProfileData() {
+    // Do NOT fetch remote cloud data if running inside iframe preview
+    if (window.self !== window.top) {
+      return;
+    }
+
     try {
       const res = await fetch(CLOUD_STORAGE_URL, { cache: 'no-store' });
       if (res.ok) {
         const json = await res.json();
         if (json && json.data) {
-          profileData = { ...defaultProfile, ...json.data };
-          localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
-          renderProfile();
+          const remoteTime = json.data.updatedAt || 0;
+          const localTime = profileData.updatedAt || 0;
+
+          // Only overwrite if cloud data is newer or local data isn't customized
+          if (remoteTime >= localTime || !savedData) {
+            profileData = { ...defaultProfile, ...json.data };
+            localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
+            renderProfile();
+          }
           return;
         }
       }
@@ -341,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const staticRes = await fetch('./profile.json', { cache: 'no-store' });
       if (staticRes.ok) {
         const staticJson = await staticRes.json();
-        if (staticJson) {
+        if (staticJson && !savedData) {
           profileData = { ...defaultProfile, ...staticJson };
           localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
           renderProfile();

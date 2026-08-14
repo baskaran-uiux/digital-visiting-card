@@ -153,18 +153,15 @@ document.addEventListener('DOMContentLoaded', () => {
     profileData.instagram = instagramInput.value.trim();
     profileData.facebook = facebookInput.value.trim();
     profileData.accentColor = accentColorInput.value;
-    if (changePasscodeInput) profileData.adminPasscode = changePasscodeInput.value.trim() || 'baskaran@#2026';
-
-    try {
-      localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
-    } catch (err) {
-      console.warn('localStorage save warning:', err);
-    }
+    profileData.updatedAt = Date.now();
+    localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
     syncToCloud(profileData);
 
-    // Reload iframe preview
+    // Send real-time message to iframe preview
     if (previewIframe && previewIframe.contentWindow) {
-      previewIframe.contentWindow.location.reload();
+      try {
+        previewIframe.contentWindow.postMessage({ type: 'UPDATE_PROFILE', data: profileData }, '*');
+      } catch (e) {}
     }
 
     if (notify) {
@@ -208,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Handle Avatar Image Upload with Automatic Smart Compression
+  // Handle Avatar Image Upload
   uploadAvatarBtn.addEventListener('click', () => {
     avatarFileInput.click();
   });
@@ -218,37 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (file) {
       const reader = new FileReader();
       reader.onload = function(evt) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const maxDim = 320; // Crisp 320px square avatar
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > maxDim) {
-              height = Math.round(height * (maxDim / width));
-              width = maxDim;
-            }
-          } else {
-            if (height > maxDim) {
-              width = Math.round(width * (maxDim / height));
-              height = maxDim;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-
-          // Convert to compressed, ultra-fast JPEG Data URL (~25KB)
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.85);
-          profileData.avatar = compressedBase64;
-          avatarPreview.src = compressedBase64;
-          saveProfileData(true);
-        };
-        img.src = evt.target.result;
+        const base64Img = evt.target.result;
+        profileData.avatar = base64Img;
+        avatarPreview.src = base64Img;
+        saveProfileData(true);
       };
       reader.readAsDataURL(file);
     }
