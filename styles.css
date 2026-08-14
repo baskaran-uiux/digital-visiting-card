@@ -1,0 +1,688 @@
+/* ==========================================================================
+   Digital Business Card - Premium Dark Mobile Theme
+   ========================================================================== */
+
+:root {
+  --bg-main: #0a0a0c;
+  --bg-gradient: radial-gradient(circle at 15% 35%, #1a0f1a 0%, #0c0c0e 65%, #050507 100%);
+  --card-bg: rgba(22, 22, 25, 0.88);
+  --card-bg-solid: #16161a;
+  --card-border: rgba(255, 255, 255, 0.09);
+  
+  --color-accent: #FF5500;
+  --color-accent-rgb: 255, 85, 0;
+  --color-accent-glow: rgba(var(--color-accent-rgb), 0.45);
+  
+  --text-main: #FFFFFF;
+  --text-muted: #9E9EA7;
+  --text-sub: #C5C5CE;
+
+  --font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --radius-card: 24px;
+  --radius-pill: 30px;
+  --radius-btn: 28px;
+}
+
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-main);
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  font-family: var(--font-family);
+  color: var(--text-main);
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Container for Mobile Centered View on Desktop & Pure Full Screen on Mobile */
+.mobile-wrapper {
+  width: 100%;
+  max-width: 440px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 16px 16px 40px 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+@media (min-width: 480px) {
+  body {
+    padding: 30px 15px;
+    align-items: center;
+  }
+  .mobile-wrapper {
+    min-height: auto;
+    border-radius: 40px;
+    background: rgba(14, 14, 17, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 
+      0 25px 60px rgba(0, 0, 0, 0.8),
+      0 0 40px rgba(var(--color-accent-rgb), 0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    padding: 20px 20px 36px 20px;
+    backdrop-filter: blur(20px);
+  }
+}
+
+.card-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ==========================================================================
+   1. Header Bar
+   ========================================================================== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 4px 4px 4px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 1.5px;
+  color: var(--text-main);
+}
+
+.logo-tm {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-left: 2px;
+  margin-top: -2px;
+}
+
+/* ==========================================================================
+   2. Profile Card
+   ========================================================================== */
+.profile-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(var(--color-accent-rgb), 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.profile-avatar-box {
+  width: 100px;
+  height: 100px;
+  border-radius: 18px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  background: #111;
+}
+
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-main);
+  line-height: 1.15;
+}
+
+.profile-name .highlight {
+  color: var(--color-accent);
+}
+
+.profile-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.profile-company {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-sub);
+}
+
+.company-accent {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   3. Action Buttons (Save Contact & Connect)
+   ========================================================================== */
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 2px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  height: 52px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  text-decoration: none;
+  border: none;
+  outline: none;
+}
+
+.btn i {
+  font-size: 14px;
+}
+
+.btn-secondary {
+  background: rgba(28, 28, 32, 0.85);
+  color: var(--text-main);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover, .btn-secondary:active {
+  background: rgba(40, 40, 48, 0.95);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(var(--color-accent-rgb), 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:hover, .btn-primary:active {
+  background: var(--color-accent);
+  filter: brightness(1.15);
+  box-shadow: 0 12px 30px rgba(var(--color-accent-rgb), 0.65);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   4. Social Media Grid
+   ========================================================================== */
+.social-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 6px 4px;
+}
+
+.social-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: rgba(20, 20, 24, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  font-size: 22px;
+  text-decoration: none;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 12px rgba(var(--color-accent-rgb), 0.45);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.social-btn:hover {
+  transform: translateY(-4px) scale(1.05);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 10px 25px rgba(var(--color-accent-rgb), 0.45);
+}
+
+.social-btn:hover::after {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   5. Bio / Description Card
+   ========================================================================== */
+.bio-section {
+  padding: 10px 6px;
+}
+
+.bio-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-sub);
+  font-weight: 400;
+}
+
+.highlight-inline {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. Contact Details List Cards
+   ========================================================================== */
+.details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-card {
+  background: rgba(22, 22, 26, 0.85);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+  color: var(--text-main);
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+.detail-card:hover {
+  background: rgba(30, 30, 36, 0.95);
+  border-color: rgba(var(--color-accent-rgb), 0.5);
+  transform: translateX(4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(var(--color-accent-rgb), 0.25);
+}
+
+.detail-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(var(--color-accent-rgb), 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+  font-size: 17px;
+  flex-shrink: 0;
+  border: 1px solid rgba(var(--color-accent-rgb), 0.35);
+  transition: all 0.25s ease;
+}
+
+.detail-card:hover .detail-icon {
+  background: var(--color-accent);
+  color: #FFFFFF;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 12px rgba(var(--color-accent-rgb), 0.5);
+}
+
+.detail-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.detail-value {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.detail-arrow {
+  color: var(--text-muted);
+  font-size: 12px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.detail-card:hover .detail-arrow {
+  color: var(--color-accent);
+  transform: translateX(3px);
+}
+
+/* ==========================================================================
+   Map Widget Section
+   ========================================================================== */
+.map-section {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.map-container {
+  width: 100%;
+  height: 200px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+  background: #141418;
+}
+
+.map-container:hover {
+  border-color: rgba(var(--color-accent-rgb), 0.6);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(var(--color-accent-rgb), 0.25);
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none;
+  filter: contrast(1.05) saturate(1.1);
+}
+
+.map-overlay-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  background: rgba(18, 18, 22, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(14px);
+  padding: 10px 14px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: var(--text-main);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+  transition: all 0.25s ease;
+}
+
+.map-overlay-badge:hover {
+  background: rgba(24, 24, 30, 0.98);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.map-badge-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.map-badge-info strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-badge-info span {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-badge-action {
+  font-size: 10.5px !important;
+  color: var(--color-accent) !important;
+  font-weight: 700;
+  margin-top: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.map-badge-dir {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(var(--color-accent-rgb), 0.45);
+  transition: transform 0.25s ease;
+}
+
+.map-overlay-badge:hover .map-badge-dir {
+  transform: scale(1.08);
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding-top: 14px;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.app-footer span {
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   7. Modals (QR Share & Profile Customizer)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(var(--color-accent-rgb), 0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.active .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: var(--text-main);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-close:hover {
+  background: rgba(var(--color-accent-rgb), 0.3);
+  color: var(--color-accent);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.modal-subtitle {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.qr-box {
+  background: #FFFFFF;
+  padding: 16px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  margin-bottom: 16px;
+}
+
+.qr-url-input-group {
+  width: 100%;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.qr-url-input-group label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.qr-url-input-group input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: #FFF;
+  font-size: 12.5px;
+  outline: none;
+}
+
+.qr-url-input-group input:focus {
+  border-color: var(--color-accent);
+}
+
+.modal-actions {
+  width: 100%;
+}
+
+.modal-actions.dual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1E1E24;
+  color: #FFF;
+  border: 1px solid var(--color-accent);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.8), 0 0 15px rgba(var(--color-accent-rgb), 0.4);
+  z-index: 2000;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}

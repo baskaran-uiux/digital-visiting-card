@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tauhidul Islam - Digital Business Card</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- QR Code Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- App Wrapper (Mobile Viewport container) -->
+  <div class="mobile-wrapper">
+    <div class="card-container">
+
+      <!-- Header Section -->
+      <header class="app-header">
+        <div class="brand-logo">
+          <span class="logo-text">INTRO</span><span class="logo-tm">TM</span>
+        </div>
+      </header>
+
+      <!-- Profile Section -->
+      <section class="profile-card">
+        <div class="profile-avatar-box">
+          <img src="avatar.png" alt="Profile Picture" id="avatarImg" class="profile-avatar" />
+        </div>
+        <div class="profile-info">
+          <h1 class="profile-name" id="displayName">
+            Tauhidul <span class="highlight">Islam</span>
+          </h1>
+          <p class="profile-title" id="displayTitle">Co-Founder & Director</p>
+          <p class="profile-company">
+            <span class="company-accent" id="displayCompanyAccent">INTRO</span> <span id="displayCompany"></span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <section class="action-buttons">
+        <button class="btn btn-secondary" id="saveContactBtn">
+          <i class="fa-solid fa-download"></i>
+          <span>SAVE CONTACT</span>
+        </button>
+        <button class="btn btn-primary" id="connectBtn">
+          <i class="fa-solid fa-paper-plane"></i>
+          <span>CONNECT</span>
+        </button>
+      </section>
+
+      <!-- Social Media Icons Grid -->
+      <section class="social-grid">
+        <a href="https://wa.me/8801725956076" target="_blank" class="social-btn" aria-label="WhatsApp" id="waLink">
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="https://linkedin.com" target="_blank" class="social-btn" aria-label="LinkedIn" id="linkedinLink">
+          <i class="fa-brands fa-linkedin-in"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank" class="social-btn" aria-label="Instagram" id="instaLink">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" class="social-btn" aria-label="Facebook" id="fbLink">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+      </section>
+
+      <!-- Bio / Description Section -->
+      <section class="bio-section">
+        <p class="bio-text" id="displayBio">
+          Co-Founder & Director, INTRO.<br>
+          Helping people to grow their business network by using <span class="highlight-inline">INTRO™</span>
+        </p>
+      </section>
+
+      <!-- Contact Details List Cards -->
+      <section class="details-list">
+        <!-- Email Item -->
+        <a href="mailto:tauhidul.islam@introcard.com" class="detail-card" id="emailCard">
+          <div class="detail-icon">
+            <i class="fa-regular fa-envelope"></i>
+          </div>
+          <div class="detail-content">
+            <span class="detail-value" id="displayEmail">tauhidul.islam@introcard.com</span>
+          </div>
+          <div class="detail-arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </a>
+
+        <!-- Website Item -->
+        <a href="https://www.introcard.com" target="_blank" class="detail-card" id="websiteCard">
+          <div class="detail-icon">
+            <i class="fa-solid fa-globe"></i>
+          </div>
+          <div class="detail-content">
+            <span class="detail-value" id="displayWebsite">www.introcard.com</span>
+          </div>
+          <div class="detail-arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </a>
+
+        <!-- Phone Item -->
+        <a href="tel:+8801725956076" class="detail-card" id="phoneCard">
+          <div class="detail-icon">
+            <i class="fa-solid fa-phone"></i>
+          </div>
+          <div class="detail-content">
+            <span class="detail-value" id="displayPhone">+880 1725-956076</span>
+          </div>
+          <div class="detail-arrow">
+            <i class="fa-solid fa-chevron-right"></i>
+          </div>
+        </a>
+      </section>
+
+      <!-- Interactive Visual Map Section -->
+      <section class="map-section" id="mapCardContainer">
+        <div class="map-container">
+          <iframe id="mapIframe" src="https://maps.google.com/maps?q=Chennai,+Tamil+Nadu&t=&z=14&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+          <a href="https://maps.google.com/?q=Chennai,+Tamil+Nadu" target="_blank" class="map-overlay-badge" id="mapOverlayLink">
+            <div class="map-badge-info">
+              <strong id="mapBadgeTitle">Chennai</strong>
+              <span id="mapBadgeSub">Tamil Nadu, India</span>
+              <span class="map-badge-action"><i class="fa-solid fa-arrow-up-right-from-square"></i> View larger map</span>
+            </div>
+            <div class="map-badge-dir">
+              <i class="fa-solid fa-diamond-turn-right"></i>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Footer Badge -->
+      <footer class="app-footer">
+        <p>POWERED BY <span>BRANZX</span></p>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- QR Code / Share Modal -->
+  <div class="modal-overlay" id="qrModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeQrModal">&times;</button>
+      <h3 class="modal-title">Share Digital Card</h3>
+      <p class="modal-subtitle">Scan this QR code to open card details instantly</p>
+      <div class="qr-box" id="qrcode"></div>
+      
+      <div class="qr-url-input-group">
+        <label for="qrUrlInput">Card URL / Link:</label>
+        <input type="text" id="qrUrlInput" placeholder="Enter your card live website link..." />
+      </div>
+
+      <div class="modal-actions dual">
+        <button class="btn btn-secondary" id="downloadQrBtn">
+          <i class="fa-solid fa-download"></i> Download QR
+        </button>
+        <button class="btn btn-primary" id="shareUrlBtn">
+          <i class="fa-solid fa-share-nodes"></i> Share Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

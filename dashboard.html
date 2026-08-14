@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Digital Business Card Manager</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="dash-nav">
+    <div class="dash-nav-container">
+      <div class="dash-brand">
+        <i class="fa-solid fa-id-card brand-icon"></i>
+        <span>INTRO<span class="tm">TM</span> Card Admin</span>
+      </div>
+      <div class="dash-actions">
+        <a href="index.html" target="_blank" class="dash-btn dash-btn-outline">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Card
+        </a>
+        <button id="saveTopBtn" class="dash-btn dash-btn-primary">
+          <i class="fa-solid fa-floppy-disk"></i> Save Changes
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Container -->
+  <main class="dash-main">
+    <div class="dash-layout">
+
+      <!-- Left Column: Settings Form -->
+      <section class="editor-section">
+        <div class="card-box">
+          <div class="card-box-header">
+            <h2><i class="fa-solid fa-sliders"></i> Card Details & Customizer</h2>
+            <p>Modify your visiting card information below. Changes reflect live in the preview pane.</p>
+          </div>
+
+          <form id="dashboardForm">
+
+            <!-- 1. Basic Profile Info -->
+            <div class="form-block">
+              <h3 class="block-title"><i class="fa-solid fa-user"></i> Profile Identity</h3>
+              <div class="grid-2">
+                <div class="field">
+                  <label for="firstName">First Name</label>
+                  <input type="text" id="firstName" value="Tauhidul" required />
+                </div>
+                <div class="field">
+                  <label for="lastName">Last Name (Accent Highlight)</label>
+                  <input type="text" id="lastName" value="Islam" required />
+                </div>
+              </div>
+
+              <div class="grid-2">
+                <div class="field">
+                  <label for="title">Job Title</label>
+                  <input type="text" id="title" value="Co-Founder & Director" required />
+                </div>
+                <div class="field">
+                  <label for="company">Company Name</label>
+                  <input type="text" id="company" value="INTRO" required />
+                </div>
+              </div>
+
+              <!-- Profile Avatar -->
+              <div class="field">
+                <label>Profile Avatar Picture</label>
+                <div class="avatar-upload-row">
+                  <img src="avatar.png" id="avatarPreview" alt="Avatar preview" class="avatar-preview-img" />
+                  <div class="upload-controls">
+                    <input type="file" id="avatarFileInput" accept="image/*" class="file-input-hidden" />
+                    <button type="button" class="dash-btn dash-btn-small" id="uploadAvatarBtn">
+                      <i class="fa-solid fa-upload"></i> Upload Photo
+                    </button>
+                    <button type="button" class="dash-btn dash-btn-small dash-btn-subtle" id="resetAvatarBtn">
+                      Use Default
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Contact Information -->
+            <div class="form-block">
+              <h3 class="block-title"><i class="fa-solid fa-address-book"></i> Contact Details</h3>
+              <div class="field">
+                <label for="phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                <input type="text" id="phone" value="+880 1725-956076" required />
+              </div>
+              <div class="field">
+                <label for="email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                <input type="email" id="email" value="tauhidul.islam@introcard.com" required />
+              </div>
+              <div class="field">
+                <label for="website"><i class="fa-solid fa-globe"></i> Website URL</label>
+                <input type="text" id="website" value="www.introcard.com" required />
+              </div>
+              <div class="field">
+                <label for="location"><i class="fa-solid fa-location-dot"></i> Location Address / Map Text</label>
+                <input type="text" id="location" value="Chennai, Tamil Nadu, India" placeholder="e.g. Chennai, Tamil Nadu, India" />
+              </div>
+              <div class="field">
+                <label for="mapUrl"><i class="fa-solid fa-map-location-dot"></i> Google Maps Link (Optional)</label>
+                <input type="text" id="mapUrl" value="https://maps.google.com/?q=Chennai,+Tamil+Nadu" placeholder="https://maps.google.com/..." />
+              </div>
+            </div>
+
+            <!-- 3. Bio & About -->
+            <div class="form-block">
+              <h3 class="block-title"><i class="fa-solid fa-quote-left"></i> About & Bio Paragraph</h3>
+              <div class="field">
+                <label for="bio">Bio Description</label>
+                <textarea id="bio" rows="3">Co-Founder & Director, INTRO
+Helping people to grow their business network by using INTRO™</textarea>
+              </div>
+            </div>
+
+            <!-- 4. Social Links -->
+            <div class="form-block">
+              <h3 class="block-title"><i class="fa-solid fa-share-nodes"></i> Social Media Links</h3>
+              <div class="grid-2">
+                <div class="field">
+                  <label><i class="fa-brands fa-whatsapp"></i> WhatsApp Number/URL</label>
+                  <input type="text" id="whatsapp" value="https://wa.me/8801725956076" />
+                </div>
+                <div class="field">
+                  <label><i class="fa-brands fa-linkedin"></i> LinkedIn URL</label>
+                  <input type="text" id="linkedin" value="https://linkedin.com" />
+                </div>
+              </div>
+              <div class="grid-2">
+                <div class="field">
+                  <label><i class="fa-brands fa-instagram"></i> Instagram URL</label>
+                  <input type="text" id="instagram" value="https://instagram.com" />
+                </div>
+                <div class="field">
+                  <label><i class="fa-brands fa-facebook"></i> Facebook URL</label>
+                  <input type="text" id="facebook" value="https://facebook.com" />
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Theme Customization -->
+            <div class="form-block">
+              <h3 class="block-title"><i class="fa-solid fa-palette"></i> Theme Accent Color</h3>
+              <div class="color-picker-row">
+                <label for="accentColor">Select Accent Glow Color:</label>
+                <input type="color" id="accentColor" value="#FF5500" class="color-picker-input" />
+                <div class="color-presets">
+                  <button type="button" class="preset-btn" style="background:#FF5500" data-color="#FF5500" title="Orange"></button>
+                  <button type="button" class="preset-btn" style="background:#00E5FF" data-color="#00E5FF" title="Cyan"></button>
+                  <button type="button" class="preset-btn" style="background:#FF007F" data-color="#FF007F" title="Neon Pink"></button>
+                  <button type="button" class="preset-btn" style="background:#7C4DFF" data-color="#7C4DFF" title="Purple"></button>
+                  <button type="button" class="preset-btn" style="background:#00E676" data-color="#00E676" title="Green"></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dashboard Submit Actions -->
+            <div class="form-actions-row">
+              <button type="button" id="resetDefaultsBtn" class="dash-btn dash-btn-outline">
+                <i class="fa-solid fa-rotate-left"></i> Reset to Defaults
+              </button>
+              <button type="submit" class="dash-btn dash-btn-primary">
+                <i class="fa-solid fa-check"></i> Save & Publish Changes
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </section>
+
+      <!-- Right Column: Live Card Preview -->
+      <section class="preview-section">
+        <div class="preview-sticky">
+          <div class="preview-header">
+            <h3><i class="fa-solid fa-mobile-screen"></i> Live Card Preview</h3>
+            <span class="badge-live"><i class="fa-solid fa-circle"></i> Live Updating</span>
+          </div>
+
+          <!-- Embedded Mobile Iframe Preview -->
+          <div class="phone-frame-mockup">
+            <iframe id="previewIframe" src="index.html" title="Live Preview"></iframe>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Notification Toast -->
+  <div class="dash-toast" id="dashToast">Saved successfully!</div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
