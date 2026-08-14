@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     accentColor: '#FF5500',
     location: 'Chennai, Tamil Nadu, India',
     mapUrl: 'https://maps.google.com/?q=Chennai,+Tamil+Nadu',
-    adminPasscode: 'admin123'
+    adminPasscode: 'baskaran@#2026'
   };
 
   let profileData = { ...defaultProfile };
@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (savedData) {
     try {
       profileData = { ...defaultProfile, ...JSON.parse(savedData) };
+      if (!profileData.adminPasscode || profileData.adminPasscode === 'admin123') {
+        profileData.adminPasscode = 'baskaran@#2026';
+      }
       if (profileData.company) {
         profileData.company = profileData.company.replace(/Card Ltd\.?/gi, '').trim();
       }
@@ -253,9 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (adminPasswordInput) adminPasswordInput.focus();
       }, 100);
     }
-    if (hintPasscode) {
-      hintPasscode.textContent = profileData.adminPasscode || 'admin123';
-    }
   }
 
   window.handleLogout = function(e) {
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const entered = adminPasswordInput.value.trim();
-      const expected = profileData.adminPasscode || 'admin123';
+      const expected = profileData.adminPasscode || 'baskaran@#2026';
 
       if (entered === expected) {
         sessionStorage.setItem('intro_card_admin_logged', 'true');
