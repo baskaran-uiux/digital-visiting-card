@@ -245,14 +245,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const isLogged = sessionStorage.getItem('intro_card_admin_logged');
     if (isLogged === 'true') {
       loginOverlay.classList.remove('active');
+      loginOverlay.style.display = 'none';
     } else {
       loginOverlay.classList.add('active');
-      if (adminPasswordInput) adminPasswordInput.focus();
+      loginOverlay.style.display = 'flex';
+      setTimeout(() => {
+        if (adminPasswordInput) adminPasswordInput.focus();
+      }, 100);
     }
     if (hintPasscode) {
       hintPasscode.textContent = profileData.adminPasscode || 'admin123';
     }
   }
+
+  window.handleLogout = function(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    sessionStorage.removeItem('intro_card_admin_logged');
+    if (loginOverlay) {
+      loginOverlay.classList.add('active');
+      loginOverlay.style.display = 'flex';
+    }
+    showToast('🔒 Dashboard Locked');
+    setTimeout(() => {
+      if (adminPasswordInput) adminPasswordInput.focus();
+    }, 100);
+  };
 
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -263,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entered === expected) {
         sessionStorage.setItem('intro_card_admin_logged', 'true');
         loginOverlay.classList.remove('active');
+        loginOverlay.style.display = 'none';
         loginErrorMsg.textContent = '';
         adminPasswordInput.value = '';
         showToast('🔓 Access Granted! Welcome Admin.');
@@ -285,12 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      sessionStorage.removeItem('intro_card_admin_logged');
-      loginOverlay.classList.add('active');
-      showToast('🔒 Dashboard Locked');
-      if (adminPasswordInput) adminPasswordInput.focus();
-    });
+    logoutBtn.addEventListener('click', window.handleLogout);
   }
 
   checkSessionAuth();
