@@ -28,6 +28,9 @@
         <button id="saveTopBtn" class="dash-btn dash-btn-primary">
           <i class="fa-solid fa-floppy-disk"></i> Save Changes
         </button>
+        <button id="logoutBtn" class="dash-btn dash-btn-subtle" title="Lock Dashboard">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
       </div>
     </div>
   </header>
@@ -165,6 +168,15 @@ Helping people to grow their business network by using INTRO™</textarea>
               </div>
             </div>
 
+            <!-- 6. Admin Security Password -->
+            <div class="form-block">
+              <h3 class="block-title"><i class="fa-solid fa-lock"></i> Admin Dashboard Passcode</h3>
+              <div class="field">
+                <label for="changePasscode"><i class="fa-solid fa-key"></i> Admin Access Passcode</label>
+                <input type="text" id="changePasscode" value="admin123" placeholder="Enter passcode..." />
+              </div>
+            </div>
+
             <!-- Dashboard Submit Actions -->
             <div class="form-actions-row">
               <button type="button" id="resetDefaultsBtn" class="dash-btn dash-btn-outline">
@@ -199,6 +211,34 @@ Helping people to grow their business network by using INTRO™</textarea>
 
   <!-- Notification Toast -->
   <div class="dash-toast" id="dashToast">Saved successfully!</div>
+
+  <!-- Security Login Gate Overlay -->
+  <div class="login-overlay active" id="loginOverlay">
+    <div class="login-card" id="loginCard">
+      <div class="login-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <div class="login-header">
+        <h2>Admin Authentication</h2>
+        <p>Enter your admin passcode to access dashboard controls</p>
+      </div>
+      <form id="loginForm">
+        <div class="field">
+          <div class="password-input-group">
+            <input type="password" id="adminPassword" placeholder="Enter admin passcode..." required autocomplete="current-password" />
+            <button type="button" id="togglePasswordBtn" class="toggle-pass-btn" title="Show/Hide Password"><i class="fa-regular fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="login-error-msg" id="loginErrorMsg"></div>
+        <button type="submit" class="dash-btn dash-btn-primary full-width-btn">
+          <i class="fa-solid fa-lock-open"></i> UNLOCK DASHBOARD
+        </button>
+      </form>
+      <div class="login-footer-hint">
+        <span>Default Passcode: <strong id="hintPasscode">admin123</strong></span>
+      </div>
+    </div>
+  </div>
 
   <script src="dashboard.js"></script>
 </body>

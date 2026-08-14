@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     avatar: 'avatar.png',
     accentColor: '#FF5500',
     location: 'Chennai, Tamil Nadu, India',
-    mapUrl: 'https://maps.google.com/?q=Chennai,+Tamil+Nadu'
+    mapUrl: 'https://maps.google.com/?q=Chennai,+Tamil+Nadu',
+    adminPasscode: 'admin123'
   };
 
   let profileData = { ...defaultProfile };
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const instagramInput = document.getElementById('instagram');
   const facebookInput = document.getElementById('facebook');
   const accentColorInput = document.getElementById('accentColor');
+  const changePasscodeInput = document.getElementById('changePasscode');
 
   const avatarPreview = document.getElementById('avatarPreview');
   const avatarFileInput = document.getElementById('avatarFileInput');
@@ -89,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     instagramInput.value = profileData.instagram;
     facebookInput.value = profileData.facebook;
     accentColorInput.value = profileData.accentColor || '#FF5500';
+    if (changePasscodeInput) changePasscodeInput.value = profileData.adminPasscode || 'admin123';
 
     if (profileData.avatar) {
       avatarPreview.src = profileData.avatar;
@@ -127,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     profileData.instagram = instagramInput.value.trim();
     profileData.facebook = facebookInput.value.trim();
     profileData.accentColor = accentColorInput.value;
+    if (changePasscodeInput) profileData.adminPasscode = changePasscodeInput.value.trim() || 'admin123';
 
     localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
 
@@ -136,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (notify) {
-      showToast('✨ Changes saved and published live!');
+      showToast('⚡ Saved successfully!');
     }
   }
 
@@ -167,11 +171,11 @@ document.addEventListener('DOMContentLoaded', () => {
     saveProfileData(true);
   });
 
-  // Color Swatch Presets
+  // Preset Buttons
   document.querySelectorAll('.preset-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const color = btn.getAttribute('data-color');
-      accentColorInput.value = color;
+    btn.addEventListener('click', (e) => {
+      const selectedColor = e.target.getAttribute('data-color');
+      accentColorInput.value = selectedColor;
       saveProfileData(true);
     });
   });
@@ -224,4 +228,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize
   populateForm();
+
+  // ==========================================================================
+  // Security Authentication Gate Logic
+  // ==========================================================================
+  const loginOverlay = document.getElementById('loginOverlay');
+  const loginCard = document.getElementById('loginCard');
+  const loginForm = document.getElementById('loginForm');
+  const adminPasswordInput = document.getElementById('adminPassword');
+  const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+  const loginErrorMsg = document.getElementById('loginErrorMsg');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const hintPasscode = document.getElementById('hintPasscode');
+
+  function checkSessionAuth() {
+    const isLogged = sessionStorage.getItem('intro_card_admin_logged');
+    if (isLogged === 'true') {
+      loginOverlay.classList.remove('active');
+    } else {
+      loginOverlay.classList.add('active');
+      if (adminPasswordInput) adminPasswordInput.focus();
+    }
+    if (hintPasscode) {
+      hintPasscode.textContent = profileData.adminPasscode || 'admin123';
+    }
+  }
+
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const entered = adminPasswordInput.value.trim();
+      const expected = profileData.adminPasscode || 'admin123';
+
+      if (entered === expected) {
+        sessionStorage.setItem('intro_card_admin_logged', 'true');
+        loginOverlay.classList.remove('active');
+        loginErrorMsg.textContent = '';
+        adminPasswordInput.value = '';
+        showToast('🔓 Access Granted! Welcome Admin.');
+      } else {
+        loginErrorMsg.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Incorrect Passcode!';
+        if (loginCard) {
+          loginCard.classList.add('shake');
+          setTimeout(() => loginCard.classList.remove('shake'), 400);
+        }
+      }
+    });
+  }
+
+  if (togglePasswordBtn && adminPasswordInput) {
+    togglePasswordBtn.addEventListener('click', () => {
+      const type = adminPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      adminPasswordInput.setAttribute('type', type);
+      togglePasswordBtn.innerHTML = type === 'password' ? '<i class="fa-regular fa-eye"></i>' : '<i class="fa-regular fa-eye-slash"></i>';
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      sessionStorage.removeItem('intro_card_admin_logged');
+      loginOverlay.classList.add('active');
+      showToast('🔒 Dashboard Locked');
+      if (adminPasswordInput) adminPasswordInput.focus();
+    });
+  }
+
+  checkSessionAuth();
 });
