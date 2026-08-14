@@ -110,23 +110,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2500);
   }
 
-  const CLOUD_STORAGE_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b110019ffdc160cf15ed';
+  const FIREBASE_DB_URL = 'https://digital-visiting-card-1dc06-default-rtdb.firebaseio.com/profile.json';
 
   async function syncToCloud(data) {
     try {
-      const payload = {
-        name: 'intro_card_profile',
-        data: data
-      };
-      await fetch(CLOUD_STORAGE_URL, {
+      await fetch(FIREBASE_DB_URL, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(data)
       });
     } catch (err) {
-      console.warn('Cloud sync background error:', err);
+      console.warn('Firebase sync error:', err);
     }
   }
 

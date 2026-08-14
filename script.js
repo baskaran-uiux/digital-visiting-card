@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  const CLOUD_STORAGE_URL = 'https://api.restful-api.dev/objects/ff8081819ff5b110019ffdc160cf15ed';
+  const FIREBASE_DB_URL = 'https://digital-visiting-card-1dc06-default-rtdb.firebaseio.com/profile.json';
 
   async function loadRemoteProfileData() {
     // Do NOT fetch remote cloud data if running inside iframe preview
@@ -347,16 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const res = await fetch(CLOUD_STORAGE_URL, { cache: 'no-store' });
+      const res = await fetch(FIREBASE_DB_URL, { cache: 'no-store' });
       if (res.ok) {
-        const json = await res.json();
-        if (json && json.data) {
-          const remoteTime = json.data.updatedAt || 0;
+        const remoteData = await res.json();
+        if (remoteData && remoteData.firstName) {
+          const remoteTime = remoteData.updatedAt || 0;
           const localTime = profileData.updatedAt || 0;
 
-          // Only overwrite if cloud data is newer or local data isn't customized
           if (remoteTime >= localTime || !savedData) {
-            profileData = { ...defaultProfile, ...json.data };
+            profileData = { ...defaultProfile, ...remoteData };
             localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
             renderProfile();
           }
@@ -364,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     } catch (err) {
-      console.warn('Cloud storage sync unreachable, trying fallback static profile:', err);
+      console.warn('Firebase Realtime DB sync error, trying fallback profile.json:', err);
     }
 
     try {
