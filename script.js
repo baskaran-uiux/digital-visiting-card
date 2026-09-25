@@ -27,19 +27,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let profileData = { ...defaultProfile };
 
-  // Load saved profile data from LocalStorage
+  // Load saved profile data from LocalStorage (Ignore outdated Tauhidul Islam demo cache)
   const savedData = localStorage.getItem('intro_card_profile');
   if (savedData) {
     try {
-      profileData = { ...defaultProfile, ...JSON.parse(savedData) };
+      const parsed = JSON.parse(savedData);
+      if (parsed.firstName === 'Tauhidul' || (parsed.updatedAt || 0) < defaultProfile.updatedAt) {
+        localStorage.removeItem('intro_card_profile');
+        profileData = { ...defaultProfile };
+      } else {
+        profileData = { ...defaultProfile, ...parsed };
+      }
       if (profileData.company) {
         profileData.company = profileData.company.replace(/Card Ltd\.?/gi, '').trim();
       }
       if (profileData.bio) {
         profileData.bio = profileData.bio.replace(/Card Ltd\.?/gi, '').trim();
       }
-      // Save cleaned data
-      localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
     } catch (e) {
       console.error('Error loading saved profile data:', e);
     }
@@ -347,31 +351,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    // 1. Fetch static profile.json with cache-busting (Guaranteed server source of truth)
     try {
-      const res = await fetch(FIREBASE_DB_URL, { cache: 'no-store' });
-      if (res.ok) {
-        const remoteData = await res.json();
-        if (remoteData && remoteData.firstName) {
-          const remoteTime = remoteData.updatedAt || 0;
-          const localTime = profileData.updatedAt || 0;
-
-          if (remoteTime >= localTime || !profileData.updatedAt) {
-            profileData = { ...defaultProfile, ...remoteData };
-            localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
-            renderProfile();
-          }
-          return;
-        }
-      }
-    } catch (err) {
-      console.warn('Firebase Realtime DB sync error, trying fallback profile.json:', err);
-    }
-
-    try {
-      const staticRes = await fetch('./profile.json', { cache: 'no-store' });
+      const staticRes = await fetch(`./profile.json?v=${Date.now()}`, { cache: 'no-store' });
       if (staticRes.ok) {
         const staticJson = await staticRes.json();
-        if (staticJson && (!profileData.updatedAt || !profileData.firstName)) {
+        if (staticJson && staticJson.firstName && staticJson.firstName !== 'Tauhidul') {
           profileData = { ...defaultProfile, ...staticJson };
           localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
           renderProfile();
@@ -379,6 +364,26 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (e) {
       console.warn('Static profile.json unavailable:', e);
+    }
+
+    // 2. Fetch Firebase database if active & updated
+    try {
+      const res = await fetch(FIREBASE_DB_URL, { cache: 'no-store' });
+      if (res.ok) {
+        const remoteData = await res.json();
+        if (remoteData && remoteData.firstName && remoteData.firstName !== 'Tauhidul') {
+          const remoteTime = remoteData.updatedAt || 0;
+          const localTime = profileData.updatedAt || 0;
+
+          if (remoteTime >= localTime) {
+            profileData = { ...defaultProfile, ...remoteData };
+            localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
+            renderProfile();
+          }
+        }
+      }
+    } catch (err) {
+      // Firebase permission or network issue
     }
   }
 
