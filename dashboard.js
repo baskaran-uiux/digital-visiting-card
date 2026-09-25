@@ -5,24 +5,25 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   const defaultProfile = {
-    firstName: 'Tauhidul',
-    lastName: 'Islam',
-    title: 'Co-Founder & Director',
-    companyAccent: 'INTRO',
+    firstName: 'Baskaran',
+    lastName: 'N',
+    title: 'Founder',
+    companyAccent: 'BranzX',
     company: '',
-    phone: '+880 1725-956076',
-    email: 'tauhidul.islam@introcard.com',
+    phone: '+91 80721 71027',
+    email: 'official.branzx@gmail.com',
     website: 'www.introcard.com',
-    bio: "Co-Founder & Director, INTRO\nHelping people to grow their business network by using INTRO™",
-    whatsapp: 'https://wa.me/8801725956076',
-    linkedin: 'https://linkedin.com',
+    bio: "Services: \n\nPersonal Branding\nSocial Media Management\nWeb Development\nApp Development\nAI Agent & Automation Services",
+    whatsapp: 'https://wa.me/+918072171027',
+    linkedin: '',
     instagram: 'https://instagram.com',
-    facebook: 'https://facebook.com',
+    facebook: '',
     avatar: 'avatar.png',
-    accentColor: '#FF5500',
-    location: 'Chennai, Tamil Nadu, India',
-    mapUrl: 'https://maps.google.com/?q=Chennai,+Tamil+Nadu',
-    adminPasscode: 'baskaran@#2026'
+    accentColor: '#7c4dff',
+    location: 'Erode, Tamil Nadu, India',
+    mapUrl: 'https://maps.app.goo.gl/uF33pB9BfzsVwux29',
+    adminPasscode: 'baskaran@#2026',
+    updatedAt: 1790355171180
   };
 
   let profileData = { ...defaultProfile };
@@ -114,20 +115,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function syncToCloud(data) {
     try {
-      await fetch(FIREBASE_DB_URL, {
+      const res = await fetch(FIREBASE_DB_URL, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(data)
       });
+      return res.ok;
     } catch (err) {
       console.warn('Firebase sync error:', err);
+      return false;
     }
   }
 
   // Save State and Reload Preview
-  function saveProfileData(notify = true) {
+  async function saveProfileData(notify = true) {
     const fullCompany = companyInput.value.trim();
     const parts = fullCompany.split(' ');
     const companyAccent = parts[0] || 'INTRO';
@@ -151,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
     profileData.accentColor = accentColorInput.value;
     profileData.updatedAt = Date.now();
     localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
-    syncToCloud(profileData);
 
     // Send real-time message to iframe preview
     if (previewIframe && previewIframe.contentWindow) {
@@ -160,8 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (e) {}
     }
 
+    const cloudSynced = await syncToCloud(profileData);
+
     if (notify) {
-      showToast('⚡ Saved & Cloud Synced!');
+      if (cloudSynced) {
+        showToast('⚡ Live Synced! All mobile devices updated.');
+      } else {
+        showToast('⚠️ Saved locally, but cloud sync failed. Check internet.');
+      }
     }
   }
 

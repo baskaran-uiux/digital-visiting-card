@@ -5,23 +5,24 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Default Profile State
   const defaultProfile = {
-    firstName: 'Tauhidul',
-    lastName: 'Islam',
-    title: 'Co-Founder & Director',
-    companyAccent: 'INTRO',
+    firstName: 'Baskaran',
+    lastName: 'N',
+    title: 'Founder',
+    companyAccent: 'BranzX',
     company: '',
-    phone: '+880 1725-956076',
-    email: 'tauhidul.islam@introcard.com',
+    phone: '+91 80721 71027',
+    email: 'official.branzx@gmail.com',
     website: 'www.introcard.com',
-    bio: "Co-Founder & Director, INTRO\nHelping people to grow their business network by using INTRO™",
-    whatsapp: 'https://wa.me/8801725956076',
-    linkedin: 'https://linkedin.com',
+    bio: "Services: \n\nPersonal Branding\nSocial Media Management\nWeb Development\nApp Development\nAI Agent & Automation Services",
+    whatsapp: 'https://wa.me/+918072171027',
+    linkedin: '',
     instagram: 'https://instagram.com',
-    facebook: 'https://facebook.com',
+    facebook: '',
     avatar: 'avatar.png',
-    accentColor: '#FF5500',
-    location: 'Chennai, Tamil Nadu, India',
-    mapUrl: 'https://maps.google.com/?q=Chennai,+Tamil+Nadu'
+    accentColor: '#7c4dff',
+    location: 'Erode, Tamil Nadu, India',
+    mapUrl: 'https://maps.app.goo.gl/uF33pB9BfzsVwux29',
+    updatedAt: 1790355171180
   };
 
   let profileData = { ...defaultProfile };
@@ -354,7 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const remoteTime = remoteData.updatedAt || 0;
           const localTime = profileData.updatedAt || 0;
 
-          if (remoteTime >= localTime || !savedData) {
+          if (remoteTime >= localTime || !profileData.updatedAt) {
             profileData = { ...defaultProfile, ...remoteData };
             localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
             renderProfile();
@@ -370,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const staticRes = await fetch('./profile.json', { cache: 'no-store' });
       if (staticRes.ok) {
         const staticJson = await staticRes.json();
-        if (staticJson && !savedData) {
+        if (staticJson && (!profileData.updatedAt || !profileData.firstName)) {
           profileData = { ...defaultProfile, ...staticJson };
           localStorage.setItem('intro_card_profile', JSON.stringify(profileData));
           renderProfile();
@@ -380,6 +381,13 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Static profile.json unavailable:', e);
     }
   }
+
+  // Auto re-sync when tab becomes visible again
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      loadRemoteProfileData();
+    }
+  });
 
   // Initialize
   renderProfile();
